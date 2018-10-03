@@ -96,7 +96,9 @@ namespace Microsoft.Identity.Core
                 match = SecKeyChain.QueryAsRecord(queryRecord, out resultCode);
             }
 
-            return match.AccessGroup.Split('.')[0];
+            return (resultCode == SecStatusCode.Success)
+                   ? match.AccessGroup.Split('.')[0]
+                   : string.Empty;
         }
 
         public TokenCacheAccessor()
@@ -188,7 +190,7 @@ namespace Microsoft.Identity.Core
 
             Save(account, service, generic, type, value);
         }
-        
+
         public void DeleteAccessToken(MsalAccessTokenCacheKey cacheKey)
         {
             var account = cacheKey.HomeAccountId + CacheKeyDelimiter +
